@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
-  final void Function(String email, String password, String username,
-      bool isLogin, BuildContext context) submitFn;
+  final void Function(
+    String email,
+    String password,
+    String username,
+    bool isLogin,
+    BuildContext context,
+  ) submitFn;
 
-  AuthForm(this.submitFn);
+  final bool isLoading;
+
+  AuthForm(this.submitFn, this.isLoading);
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -98,21 +105,24 @@ class _AuthFormState extends State<AuthForm> {
                     },
                   ),
                   SizedBox(height: 12),
-                  RaisedButton(
-                    child: Text(_isLogin ? 'Login' : 'Signup'),
-                    onPressed: _trySubmit,
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text(_isLogin
-                        ? 'Create new account'
-                        : 'I already have an account'),
-                    onPressed: () {
-                      setState(() {
-                        _isLogin = !_isLogin;
-                      });
-                    },
-                  ),
+                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (!widget.isLoading)
+                    RaisedButton(
+                      child: Text(_isLogin ? 'Login' : 'Signup'),
+                      onPressed: _trySubmit,
+                    ),
+                  if (!widget.isLoading)
+                    FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      child: Text(_isLogin
+                          ? 'Create new account'
+                          : 'I already have an account'),
+                      onPressed: () {
+                        setState(() {
+                          _isLogin = !_isLogin;
+                        });
+                      },
+                    ),
                 ],
               ),
             ),
