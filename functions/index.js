@@ -19,7 +19,7 @@ exports.myFunction = functions.firestore
         title: snap.data().username,
         body: snap.data().text,
         clickAction: 'FLUTTER_NOTIFICATION_CLICK',
-        sound: "default",
+        sound: "default"
       },
     });
   });
