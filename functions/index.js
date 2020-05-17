@@ -1,5 +1,9 @@
 const functions = require('firebase-functions');
 
+const admin = require('firebase-admin');
+
+admin.initializeApp();
+
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -10,6 +14,12 @@ const functions = require('firebase-functions');
 exports.myFunction = functions.firestore
   .document('chat/{message}')
   .onCreate((snap, context) => {
-    console.log(snap.data());
-    return;
+    return admin.messaging().sendToTopic('chat', {
+      notification: {
+        title: snap.data().username,
+        body: snap.data().text,
+        clickAction: 'FLUTTER_NOTIFICATION_CLICK',
+        sound: "default",
+      },
+    });
   });
